@@ -1,5 +1,4 @@
-const OPENAI_BASE       = 'https://api.openai.com/v1/chat/completions';
-const STORAGE_KEY_API   = 'aptiq_api_key';
+const OPENAI_BASE       = '/api/chat';  // Secure proxy — key is server-side only
 const STORAGE_KEY_MODEL = 'aptiq_model';
 const STORAGE_KEY_STYLE = 'aptiq_style';
 
@@ -7,7 +6,7 @@ const MAX_RETRIES  = 3;
 const RETRY_DELAY  = 2000;
 
 let state = {
-  apiKey: localStorage.getItem(STORAGE_KEY_API) || '',
+  apiKey: '',  // Not needed — handled securely by server proxy
   model:  localStorage.getItem(STORAGE_KEY_MODEL) || 'gpt-4o-mini',
   style:  localStorage.getItem(STORAGE_KEY_STYLE) || 'balanced',
   images: [],
@@ -231,7 +230,6 @@ async function callOpenAI(question, images) {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${state.apiKey}`,
     },
     body: JSON.stringify({
       model: state.model,
