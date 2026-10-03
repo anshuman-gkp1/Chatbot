@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AptIQ — AI Solver</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ===== TOP BAR ===== -->
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="logo">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+          <circle cx="10" cy="10" r="9" stroke="#10a37f" stroke-width="1.5"/>
+          <path d="M6 10 L8.5 7.5 L10.5 9.5 L13 7" stroke="#10a37f" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        AptIQ
+      </div>
+      <div class="topbar-right">
+        <button class="icon-btn" id="new-chat-btn" title="New chat">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="17" height="17">
+            <path d="M12 5v14M5 12h14"/>
+          </svg>
+          New chat
+        </button>
+        <button class="icon-btn" id="settings-btn" title="Settings">
+          <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16">
+            <path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd"/>
+          </svg>
+          Settings
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===== CHAT AREA ===== -->
+  <main class="chat-area" id="chat-area">
+
+    <!-- Welcome -->
+    <div class="welcome" id="welcome">
+      <div class="welcome-icon">✦</div>
+      <h1>What do you need help with?</h1>
+      <p>Paste a question, image, or screenshot — I'll detect the type and solve it.</p>
+      <div class="chips">
+        <span class="chip">🧮 Aptitude MCQ</span>
+        <span class="chip">🐍 Python / Coding</span>
+        <span class="chip">🗄️ SQL</span>
+        <span class="chip">🌐 Web Dev</span>
+        <span class="chip">🌲 DSA</span>
+        <span class="chip">📷 Paste screenshot</span>
+      </div>
+    </div>
+
+    <!-- Messages -->
+    <div class="messages" id="messages"></div>
+  </main>
+
+  <!-- ===== INPUT BAR ===== -->
+  <footer class="input-footer">
+    <!-- Image preview strip -->
+    <div class="img-strip" id="img-strip"></div>
+
+    <div class="input-box" id="input-box">
+      <label class="attach-btn" for="file-input" title="Attach image  (or Ctrl+V to paste screenshot)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
+          <path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/>
+        </svg>
+      </label>
+      <input type="file" id="file-input" accept="image/*" multiple style="display:none" />
+
+      <textarea
+        id="question-input"
+        class="question-input"
+        placeholder="Ask anything — aptitude, coding, SQL, web dev… (Ctrl+V to paste screenshot)"
+        rows="1"
+      ></textarea>
+
+      <button class="send-btn" id="send-btn" disabled>
+        <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
+          <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+        </svg>
+      </button>
+    </div>
+    <div class="input-hint">Enter to send · Shift+Enter for new line · Ctrl+V to paste screenshot</div>
+  </footer>
+
+  <!-- ===== SETTINGS PANEL ===== -->
+  <div class="settings-overlay" id="settings-overlay" style="display:none">
+    <div class="settings-panel">
+      <div class="settings-header">
+        <h2>Settings</h2>
+        <button id="close-settings">✕</button>
+      </div>
+
+      <div class="setting-group">
+        <label class="setting-label">OpenAI API Key</label>
+        <p class="setting-desc">Paste your <code style="font-size:11px;background:#2a2a2a;padding:1px 5px;border-radius:3px">sk-...</code> key from <a href="https://platform.openai.com/api-keys" target="_blank">platform.openai.com/api-keys →</a></p>
+        <div class="api-key-row">
+          <input type="password" id="api-key-input" class="setting-input" placeholder="sk-..." />
+          <button class="btn-ghost" id="toggle-pw">Show</button>
+        </div>
+        <div class="btn-row">
+          <button class="btn-primary" id="save-key-btn">Save</button>
+          <button class="btn-ghost" id="test-key-btn">Test</button>
+        </div>
+        <div class="key-status" id="key-status"></div>
+      </div>
+
+      <div class="setting-group">
+        <label class="setting-label">Model</label>
+        <select class="setting-select" id="model-select">
+          <option value="gpt-4o-mini">GPT-4o Mini (★ Recommended · Fast · Images · Cheap)</option>
+          <option value="gpt-4o">GPT-4o (Best quality · Images · Slower)</option>
+          <option value="gpt-4-turbo">GPT-4 Turbo (Powerful · Images)</option>
+          <option value="gpt-3.5-turbo">GPT-3.5 Turbo (Text only · Cheapest)</option>
+        </select>
+        <button class="btn-primary" id="save-model-btn" style="margin-top:10px">Save</button>
+      </div>
+
+      <div class="setting-group">
+        <label class="setting-label">Response Style</label>
+        <div class="radio-list">
+          <label class="radio-item"><input type="radio" name="style" value="concise" /><div><strong>Concise</strong><span>Answer + one-line reason</span></div></label>
+          <label class="radio-item"><input type="radio" name="style" value="balanced" checked /><div><strong>Balanced</strong><span>Answer + clear explanation</span></div></label>
+          <label class="radio-item"><input type="radio" name="style" value="detailed" /><div><strong>Detailed</strong><span>Full explanation with examples</span></div></label>
+        </div>
+        <button class="btn-primary" id="save-style-btn" style="margin-top:10px">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
